@@ -1,0 +1,141 @@
+html *{
+    /* outline: 1px dotted green; */
+}
+body{
+    background-color: #e7e9ea;
+    background-image: url(/site/images/background.jpg);
+    background-position: top left;
+    background-repeat: repeat-x;
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+}
+body > div{
+    width: 1200px;
+    margin: 0 auto;
+}
+
+/* SITE-WIDE */
+a{
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
+}
+a:hover{
+    text-decoration: underline;
+}
+h2, h3{
+    font-size: 2em;
+    font-weight: bold;
+}
+h4{
+    font-weight: bold;
+}
+
+
+/* HEADER */
+.header h1{
+    background-image: url(/site/images/title.jpg);
+    background-position: top left;
+    background-repeat: no-repeat;
+    width: 232px;
+    height: 133px;
+    text-indent: -3000px;
+}
+.navigation{
+    float: right;
+    text-align: right;
+    margin-top: 30px;
+}
+.navigation *{
+    vertical-align: bottom;
+}
+.navigation input{
+    height: 32px;
+    width: 350px;
+    border: none;
+    line-height: 32px;
+    padding-left: 9px;
+}
+.navigation button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+.navigation .accounts{
+    margin-top: 15px;
+}
+
+/* CONTENT */
+.content{
+    background-color: #ffffff;
+    min-height: 400px;
+    padding: 1em 0;
+    padding-bottom: 1em;
+}
+.content > *{
+    margin-left: 12px;
+    /* outline: 1px dotted red; */
+}
+.content > .magazine-container{
+    margin-left: 0;
+}
+
+/* BROWSE */
+.magazine-thumbnail{
+    text-align: center;
+    text-decoration: none;
+    float: left;
+    width: 200px;
+    border: 1px solid #ffffff;
+    padding: 10px;
+    margin-left: 12px;
+}
+.magazine-thumbnail:hover{
+    border: 1px solid #e7e9ea;
+}
+
+
+/* FOOTER */
+.footer table{
+    color: #ffffff;
+    width: 100%;
+}
+.footer table a{
+    color: inherit;
+}
+.footer th{
+    background-color: #1f1d1d;
+    font-weight: bold;
+    line-height: 4em;
+}
+.footer th, .footer td{
+    padding-left: 2em;
+    width: 25%;
+}
+.footer td{
+    background-color: #272727;
+    /* border-right: 1px solid #1f1d1d; */
+    border-left: 1px solid #3c3c3c;
+    color: #b5b0b0;
+    line-height: 2em;
+}
+.footer tr.first-row td{
+    padding-top: 1em;
+}
+.footer tr.last-row td{
+    padding-bottom: 1em;
+}
+.footer td:first-child{
+    border-left: none;
+}
+.footer table img{
+    vertical-align: middle;
+}
+.footer .copyright{
+    background-color: #ffffff;
+    line-height: 3em;
+    text-align: center;
+}

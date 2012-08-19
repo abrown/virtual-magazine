@@ -1,0 +1,107 @@
+.magazine-container{
+    background-color: #ffffff; /* #e7e9ea; */
+    background-image: url('/client/images/loading.gif');
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    min-height: 200px;
+    text-align: center;
+    position: relative;
+    /* JS will cause float: left when in editing mode */
+}
+.magazine-page{
+    position: relative;
+    margin: 0 auto; /* center image inside container */
+}
+.magazine-page img{
+    z-index: 0;    
+}
+.magazine-link{
+    cursor: pointer;
+    z-index: 20;
+}
+
+/** CONTROLS: **/
+.magazine-navigation-controls, .magazine-editing-controls{
+    position: relative;
+    border: 2px solid transparent;
+}
+
+/** EDITING **/
+.magazine-editing-controls{
+
+}
+/* EDITING CONTROLS */
+.magazine-editing-controls{
+    margin-bottom: 3em;
+}
+.magazine-add-link{
+    padding: 0.5em;
+    border-radius: 0.25em;
+    color: white;
+    background-color: black !important;
+    font-weight: bold;
+}
+.magazine-editing-links{
+    margin-top: 1em;
+}
+
+/** EDITING: activated when adding links to a page **/
+.magazine-editing{
+    cursor: crosshair;
+    outline: 2px solid blue;
+}
+.magazine-editing .magazine-link{
+    outline: 2px dashed blue;
+}
+
+/** NAVIGATION **/
+table.magazine-navigation-controls{
+    border-collapse: collapse;
+    margin-bottom: 1em;
+    width: 100%;
+}
+table.magazine-navigation-controls, .magazine-navigation-controls td{
+    border: none;
+}
+table.magazine-navigation-controls td{
+    border-left: 1px solid #D9CECE;
+    padding: 1em;
+}
+table.magazine-navigation-controls td:first-child{
+    border-left: none;
+}
+table.magazine-navigation-controls h2{
+    font-weight: bold;
+    font-size: 1.5em;
+}
+table.magazine-navigation-controls span{
+    color: #6a6868;
+}
+table.magazine-navigation-controls .magazine-button{
+    margin-right: 1em;
+}
+
+/** BUTTONS **/
+.magazine-button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+.magazine-button:hover{
+
+}
+.magazine-next, .magazine-previous{
+    position: absolute;
+    width: 40%;
+    z-index: 10; /* links must go above this layer */
+}
+.magazine-next{
+    right: 0;
+    text-align: right;
+}
+.magazine-previous{
+    left: 0;
+    text-align: left;
+}
+
