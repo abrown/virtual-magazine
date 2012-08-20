@@ -147,7 +147,7 @@
         getSocialSettings: function(){
             var self = this, o = this.options, el = this.element;
             // retrieve social settings JSON with AJAX
-            var url = o.url.replace(/magazine.+/, 'social');
+            var url = o.url.replace(/service\.php\/magazine.+/, 'service.php/social');
             $.ajax(url, {
                 data: {
                     accept: 'application/json' // ensures the request will return JSON from the server
@@ -191,7 +191,7 @@
         getPageLinks: function(){
             var self = this, o = this.options, el = this.element;
             // create url
-            var url = o.url.replace(/magazine.+/, 'page/');
+            var url = o.url.replace(/service\.php\/magazine.+/, 'service.php/page/');
             url += el.data('magazine.id')+'/'+el.data('page');
             // make AJAX call
             $.ajax(url, {
@@ -667,7 +667,7 @@
         saveLink: function(link){
             var self = this, o = this.options, el = this.element;
             // create url
-            var url = o.url.replace(/magazine.+/, 'link');
+            var url = o.url.replace(/service\.php\/magazine.+/, 'service.php/link');
             // POST
             $.post(url, link, function(data, status, xhr){
                 self.displayPage(link.page);   
