@@ -64,3 +64,5 @@ requests for the same page; this was disabled because IE was caching everything
 - make buttons (embed, print, etc.) configurable in the widget options
 
 - add tests
+
+- improve error dialog display, styling
