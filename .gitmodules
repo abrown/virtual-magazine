@@ -1,0 +1,3 @@
+[submodule "server/pocket-knife"]
+	path = server/pocket-knife
+	url = git://github.com/andrewsbrown/pocket-knife.git
