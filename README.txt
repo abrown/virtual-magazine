@@ -23,6 +23,8 @@ Installing Ghostscript
 3. Test that it will create JPEGs:
     $ gs -dNOPAUSE -sDEVICE=jpeg -r200 -sOutputFile=p%d.jpg file.pdf
 
+For more information on using Ghostscript see www.ghostscript.com/doc/9.06/Use.htm
+
 
 Configuring the server
 ----------------------
