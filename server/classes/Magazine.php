@@ -66,7 +66,7 @@ class Magazine extends ResourceItem {
      * so that images will be clear when scaled down.
      */
 
-    const RESOLUTION = 300;
+    const RESOLUTION = 200;
 
     /**
      * Used by PUT/POST to determine what template to display for 'text/html'
@@ -215,7 +215,8 @@ class Magazine extends ResourceItem {
             return ''; // no data returned, go to 'magazine-create.php' template
         }
         // validate fields
-        if( !@$entity->tracking_code ) unset($entity->tracking_code); // browsers will submit an empty string that triggers the regex validation
+        if (!@$entity->tracking_code)
+            unset($entity->tracking_code); // browsers will submit an empty string that triggers the regex validation
         BasicValidation::with($entity)
                 ->isObject()
                 ->withProperty('id')->isAlphanumeric()->isNotEmpty()->hasLengthUnder(20)
@@ -231,7 +232,7 @@ class Magazine extends ResourceItem {
             throw new Error("A magazine with ID '{$entity->id}' already exists.", 400);
         }
         // check mime type
-        if ($entity->files->pdf->type != 'application/pdf') {
+        if (isset($entity->files->pdf) && $entity->files->pdf->type != 'application/pdf') {
             throw new Error('Upload must be a PDF', 400);
         }
         // bind
@@ -242,9 +243,20 @@ class Magazine extends ResourceItem {
         $this->created = date('M j, Y');
         $this->pdf = $this->getPathToPdf($this->id);
         // create PDF
-        $length = file_put_contents($this->pdf, $entity->files->pdf->contents);
-        if ($length != $entity->files->pdf->size) {
-            throw new Error('Failed while saving upload.', 400);
+        if (!isset($entity->uploaded_pdf)) {
+            // in this case, the user has not used SWFUpload and the PDF is 
+            // available in files (see Representation.php, 'mulipart/form-data')
+            $length = file_put_contents($this->pdf, $entity->files->pdf->contents);
+            if ($length != $entity->files->pdf->size) {
+                throw new Error('Failed while saving upload.', 400);
+            }
+        } else {
+            // in this case, the file has already been uploaded with SWFUpload
+            $path = $this->getPathToUploads() . DS . $entity->uploaded_pdf;
+            if (!file_exists($path)) {
+                throw new Error('Could not find uploaded file: ' . $path, 404);
+            }
+            @copy($path, $this->getPathToPdf($this->id));
         }
         // create JPEGs
         $pages_created = $this->createJPEG($this->id);
@@ -271,7 +283,8 @@ class Magazine extends ResourceItem {
             return $this; // no data returned, go to 'magazine-edit.php' template
         }
         // check fields
-        if( !@$entity->tracking_code ) unset($entity->tracking_code); // browsers will submit an empty string that triggers the regex validation
+        if (!@$entity->tracking_code)
+            unset($entity->tracking_code); // browsers will submit an empty string that triggers the regex validation
         BasicValidation::with($entity)
                 ->isObject()
                 ->hasNoProperty('id')
@@ -287,6 +300,18 @@ class Magazine extends ResourceItem {
         $this->changed();
         // return
         return $result;
+    }
+
+    /**
+     * Return path to the uploads folder
+     * @return string
+     */
+    public static function getPathToUploads() {
+        $path = realpath(get_base_dir() . '/../../upload');
+        if ($path == false) {
+            throw new Error('Could not find upload directory.', 404);
+        }
+        return $path;
     }
 
     /**
@@ -350,11 +375,20 @@ class Magazine extends ResourceItem {
             throw new Error('Could not find PDF file: ' . $path, 404);
         }
         $file_path = self::getPathToData() . DS . $id;
-        $command = self::getPathToGhostscript() . " -dNOPAUSE -sDEVICE=jpeg -r" . self::RESOLUTION . " -sOutputFile={$file_path}[%d].jpg {$path}";
-        exec($command, $output, $return_value);
-        if ($return_value !== 0) {
-            $error = implode("\n", $output);
-            throw new Error('Ghostscript failure returned: ' . $error, 500);
+        $i = 1;
+        $continue = true;
+        while($continue){
+            $command = self::getPathToGhostscript() . " -dNOPAUSE -sDEVICE=jpeg -r" . self::RESOLUTION . " -dFirstPage=$i -dLastPage=$i -sOutputFile={$file_path}[$i].jpg {$path}";
+            exec($command, $output, $return_value); 
+            if( !file_exists("{$file_path}[$i].jpg") || $return_value != 0 ) $continue = false;
+            $i++;
+            /*
+            if ($return_value !== 0) {
+                $error = implode("\n", $output);
+                throw new Error('Ghostscript failure returned: ' . $error, 500);
+            }
+             * 
+             */
         }
         // return
         return self::countPages($id);
