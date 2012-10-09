@@ -32,11 +32,12 @@ Configuring the server
 Main files to look at:
     1. service.php - provides a RESTful web service using pocket-knife for 
     manipulating magazines, pages, links, etc.; the start URL for creating
-    2. and viewing magazines is 'service.php/library'
-    embed.php - browse to this with the magazine ID appended to display the HTML5 
+    and viewing magazines is 'service.php/library'
+    2. embed.php - browse to this with the magazine ID appended to display the HTML5 
     code to embed; e.g. 'embed.php/some-magazine-id'
     3. print.php - browse to this with the magazine ID appended to display the a 
     printable version of the magazine
+    4. upload.php - used by SWFUpload to upload PDF files to /upload
 
 
 Using the client
@@ -56,6 +57,7 @@ automatic re-sizing to work.
 TODO
 ----
 
+- 
 - fix caching so that the server can respond with '304 Not Modified' to repeated
 requests for the same page; this was disabled because IE was caching everything
 
