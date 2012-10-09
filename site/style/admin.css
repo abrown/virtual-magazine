@@ -1,8 +1,9 @@
 /* HEADER */
 .header h1{
-    text-indent: 250px;
-    font-size: 50px;
-    line-height: 133px;
+    text-indent: 328px;
+    font-size: 42px;
+    line-height: 100px;
+    font-weight: bold;
 }
 .header h1:hover{
     text-decoration: none;
@@ -21,13 +22,17 @@
     margin-top: 0;
 }
 
-
+/* */
 .magazine-embed-script{
     color: black;
     width: 100%;
     height: 10em;
 }
 
+/* LIBRARY TABLE */
+.admin-table{
+    min-width: 50%;
+}
 .admin-table th{
     padding: 0.5em;
     background-color: #D9CECE;
