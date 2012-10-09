@@ -1,9 +1,12 @@
-<!-- new magazine -->
+<!-- buttons -->
 <p>
     <a class="magazine-admin-button" href="<?php echo WebUrl::create('magazine?method=POST', false); ?>">New Magazine</a>
-    <a class="magazine-admin-button" href="<?php echo WebUrl::create('social?method=PUT', false); ?>">Edit Social Settings</a>
+    <a class="magazine-admin-button" href="<?php echo WebUrl::getDirectoryUrl() . 'configure.php'; ?>">Edit Settings</a>
     <a class="magazine-admin-button" href="<?php echo WebUrl::getDirectoryUrl() . 'api.php'; ?>">API Documentation</a>
-</p>    
+</p>
+
+<!-- title -->
+<h2>Magazine Library</h2>
 
 <!-- table -->
 <table class="admin-table library">

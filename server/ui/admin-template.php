@@ -1,3 +1,6 @@
+<?php
+$configuration = new Settings(get_base_dir().'/../configuration.json');
+?>
 <!DOCTYPE hmtl>
 <html>
     <head>
@@ -16,7 +19,7 @@
                     <a href="#"> Logout</a>
                 </div>
             </div>
-            <a href="<?php echo WebUrl::create('library', false); ?>"><h1>Administration</h1></a>
+            <a href="<?php echo WebUrl::getDirectoryUrl().'service.php/library'; ?>"><h1>Administration</h1></a>
         </div>
 
         <!-- main content -->
@@ -28,12 +31,11 @@
         <div class="footer">
             <table>
                 <tr>
-                    <th>Purple Cow Magazine</th>
+                    <th><?php echo $configuration->get('title'); ?></th>
                     <th>Business</th>
                     <th>Developers</th>
                     <th>Get Social With Us</th>
                 </tr>
-            
                 <tr class="first-row">
                     <td><a href="#">About</a></td>
                     <td><a href="#">Overview</a></td>
@@ -74,7 +76,7 @@
                     <td> </td>
                 </tr>
             </table>
-            <div class="copyright">Copyright &copy; 2012 Purple Cow Magazines</div>
+            <div class="copyright">Copyright &copy; 2012 <?php echo $configuration->get('title'); ?></div>
         </div>
     </body>
 </html>

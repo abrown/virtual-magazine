@@ -6,6 +6,9 @@ require 'server/classes/Link.php';
 require 'server/classes/Page.php';
 require 'server/classes/Social.php';
 
+// get configuration
+$configuration = new Settings(get_base_dir() . '/../configuration.json');
+
 // start capture
 ob_start();
 ?>
@@ -52,6 +55,6 @@ $content = ob_get_clean();
 
 // templating
 $template = new WebTemplate('server/ui/site-template.php', WebTemplate::PHP_FILE);
-$template->replace('title', 'StatMags');
+$template->replace('title', $configuration->get('title'));
 $template->replace('content', $content);
 $template->display();

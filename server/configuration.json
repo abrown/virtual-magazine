@@ -1,0 +1,25 @@
+{
+    "title":"StatMags",
+    "representations":["text\/html","application\/json","application\/x-www-form-urlencoded","multipart\/form-data"],
+    "authentication":{
+        "enforce_https":false,
+        "authentication_type":"digest",
+        "password_security":"plaintext",
+        "users":[{
+            "username":"admin",
+            "roles":["administrator"],
+            "password":"admin"
+        }],
+        "storage":{
+            "type":"memory",
+            "data":{
+                "0":{
+                    "username":"admin",
+                    "roles":["administrator"],
+                    "password":"admin"
+                }
+            }
+        }
+},
+"acl":["admin can * *\/*","* can GET magazine\/*","* can GET page\/*","* can OPTIONS page\/*","* can GET social\/*"]
+}

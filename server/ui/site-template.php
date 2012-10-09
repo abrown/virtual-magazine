@@ -1,3 +1,6 @@
+<?php
+$configuration = new Settings(get_base_dir().'/../configuration.json');
+?>
 <!DOCTYPE hmtl>
 <html>
     <head>
@@ -21,7 +24,7 @@
                     <a href="/service.php/library"> Login</a>
                 </div>
             </div>
-            <a href="/"><h1>Purple Cow Magazines</h1></a>
+            <a href="/"><h1><template:title/></h1></a>
         </div>
 
         <!-- main content -->
@@ -33,7 +36,7 @@
         <div class="footer">
             <table>
                 <tr>
-                    <th>Purple Cow Magazine</th>
+                    <th><?php echo $configuration->get('title'); ?></th>
                     <th>Business</th>
                     <th>Developers</th>
                     <th>Get Social With Us</th>
@@ -78,7 +81,7 @@
                     <td> </td>
                 </tr>
             </table>
-            <div class="copyright">Copyright &copy; 2012 Purple Cow Magazines</div>
+            <div class="copyright">Copyright &copy; 2012 <?php echo $configuration->get('title'); ?></div>
         </div>
     </body>
 </html>
