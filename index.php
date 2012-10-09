@@ -54,7 +54,7 @@ endforeach;
 $content = ob_get_clean();
 
 // templating
-$template = new WebTemplate('server/ui/site-template.php', WebTemplate::PHP_FILE);
+$template = new WebTemplate('site/templates/main.php', WebTemplate::PHP_FILE);
 $template->replace('title', $configuration->get('title'));
 $template->replace('content', $content);
 $template->display();

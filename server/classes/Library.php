@@ -17,7 +17,7 @@ class Library extends ResourceList {
      */
     function OUTPUT_TRIGGER($representation) {
         if ($representation->getContentType() == 'text/html') {
-            $representation->setTemplate('server/ui/admin-template.php', WebTemplate::PHP_FILE);
+            $representation->setTemplate('site/templates/admin.php', WebTemplate::PHP_FILE);
             $representation->getTemplate()->replace('title', $this->getURI());
             $representation->getTemplate()->replaceFromPHPFile('content', 'server/ui/library.php' , array('data' => $representation->getData()));
         }

@@ -86,7 +86,7 @@ class Magazine extends ResourceItem {
           } */
         // set main template
         if ($representation->getContentType() == 'text/html') {
-            $representation->setTemplate('server/ui/admin-template.php', WebTemplate::PHP_FILE);
+            $representation->setTemplate('site/templates/admin.php', WebTemplate::PHP_FILE);
             $representation->getTemplate()->replace('title', $this->getURI());
         }
         return $representation;
