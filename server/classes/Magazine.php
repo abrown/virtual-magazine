@@ -177,9 +177,9 @@ class Magazine extends ResourceItem {
         $number_of_pages = self::countPages($this->id);
         for ($i = 1; $i <= $number_of_pages; $i++) {
             $uri = "page/{$this->id}/{$i}";
-            StorageCache::delete($uri);
+            Cache::getInstance()->DELETE($uri);
         }
-        StorageCache::markModified('library');
+        Cache::getInstance()->DELETE('library');
         // delete PDF
         @unlink(self::getPathToPdf($this->id));
         // delete JPEGs

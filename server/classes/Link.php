@@ -84,7 +84,7 @@ class Link extends ResourceItem {
     public function POST_OUTPUT_TRIGGER($representation) {
         // update cache
         $uri = "page/{$this->magazine_id}/{$this->page}";
-        StorageCache::markModified($uri);
+        Cache::getInstance()->DELETE($uri);
         // return
         return $representation;
     }
@@ -97,7 +97,7 @@ class Link extends ResourceItem {
     public function PUT_OUTPUT_TRIGGER($representation) {
         // update cache
         $uri = "page/{$this->magazine_id}/{$this->page}";
-        StorageCache::markModified($uri);
+        Cache::getInstance()->DELETE($uri);
         // return
         return $representation;
     }
@@ -110,7 +110,7 @@ class Link extends ResourceItem {
     public function DELETE_OUTPUT_TRIGGER($representation) {
         // update cache
         $uri = "page/{$this->magazine_id}/{$this->page}";
-        StorageCache::markModified($uri);
+        Cache::getInstance()->DELETE($uri);
         return $representation;
     }
 
