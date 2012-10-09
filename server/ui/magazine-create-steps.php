@@ -106,8 +106,14 @@ WebSession::put('USER_CAN_UPLOAD', 1);
 </script>
 <h2>Create Magazine</h2>
 <p>
-    Upload a PDF to create a magazine. Please note that the ID may only contain letters, numbers, hyphens, and underscores.
-</p>   
+    To create a magazine, follow the steps below.
+</p>
+
+<!-- INFO -->
+<h3>1. Save Magazine Information</h3>
+<p>
+    This forms an entry in the magazine library for the new magazine. Please note that the ID may only contain letters, numbers, hyphens, and underscores.
+</p>
 <form id="magazine-create" method="POST" action="<?php echo WebUrl::getLocationUrl() . '/magazine'; ?>" enctype="multipart/form-data">
     <table class="admin-table magazine">
         <tr>    
@@ -138,7 +144,45 @@ WebSession::put('USER_CAN_UPLOAD', 1);
         </tr>
         <tr>    
             <td></td>
-            <td><input type="submit" id="magazine-submit" value="Upload"/></td>
+            <td><input type="submit" id="magazine-submit" value="Save"/></td>
         </tr>
     </table>
 </form>
+
+<!-- UPLOAD -->
+<h3>2. Upload a PDF</h3>
+<table class="admin-table magazine">
+    <tr>    
+        <td>PDF</td>
+        <td id="magazine-pdf">
+            <!-- SWFUpload -->
+            <input type="hidden" id="magazine-uploaded-pdf" name="uploaded_pdf" />
+            <input type="text" id="local-file-name" value="" title="File to upload." disabled="disabled" />
+            <input id="magazine-upload" type="file" name="pdf" accept="application/pdf" title="Locate a PDF file for this magazine." required="required"/>
+            <span id="magazine-upload-progress"></span>
+        </td>
+    </tr>
+    <tr>    
+        <td></td>
+        <td><input type="submit" id="magazine-submit" value="Upload"/></td>
+    </tr>
+</table>
+
+<!-- CONVERT -->
+<h3>2. Conver the PDF</h3>
+<table class="admin-table magazine">
+    <tr>    
+        <td>PDF</td>
+        <td id="magazine-pdf">
+            <!-- SWFUpload -->
+            <input type="hidden" id="magazine-uploaded-pdf" name="uploaded_pdf" />
+            <input type="text" id="local-file-name" value="" title="File to upload." disabled="disabled" />
+            <input id="magazine-upload" type="file" name="pdf" accept="application/pdf" title="Locate a PDF file for this magazine." required="required"/>
+            <span id="magazine-upload-progress"></span>
+        </td>
+    </tr>
+    <tr>    
+        <td></td>
+        <td><input type="submit" id="magazine-submit" value="Upload"/></td>
+    </tr>
+</table>

@@ -16,7 +16,9 @@ WebSession::put('USER_CAN_UPLOAD', 1);
         if(navigator.mimeTypes ["application/x-shockwave-flash"] != undefined) hasFlash = true;
     }
 
-    
+    /**
+     * Start the SWFUpload object
+     */
     $(document).ready(function () {
         // if flash exists, do not display redundant input box
         if(!hasFlash){
@@ -78,22 +80,15 @@ WebSession::put('USER_CAN_UPLOAD', 1);
                 }
             },
             upload_error_handler: function(file, error, message){
-                console.log(file);
-                console.log(error);
-                console.log(message);
                 alert('Upload failed: '+message);
                 CURRENT_ID = null;
             },
             upload_success_handler: function(file, server_data, received_response){
-                console.log("success");
-                console.log(file);
-                console.log(server_data);
-                console.log(received_response);
                 CURRENT_ID = null;
-                hasError = (server_data.match(/Error:/gi)) ? true : false;
+                var hasError = (server_data.match(/Error:/gi)) ? true : false;
                 if(hasError){
                     alert('Upload failed with error: '+server_data);
-                    $('#magazine-submit').removeAttribute('disabled').val('Upload');
+                    $('#magazine-submit').removeAttribute('disabled').val('Create');
                 }
                 else{
                     $('#magazine-uploaded-pdf').val(server_data);
@@ -104,10 +99,14 @@ WebSession::put('USER_CAN_UPLOAD', 1);
         });
     });
 </script>
+
 <h2>Create Magazine</h2>
 <p>
-    Upload a PDF to create a magazine. Please note that the ID may only contain letters, numbers, hyphens, and underscores.
-</p>   
+    To create a magazine, fill out the information below and upload a PDF. Please 
+    note that the ID may only contain letters, numbers, hyphens, and underscores.
+    Depending on the size and complexity of the PDF the conversion process may take
+    some time.
+</p>
 <form id="magazine-create" method="POST" action="<?php echo WebUrl::getLocationUrl() . '/magazine'; ?>" enctype="multipart/form-data">
     <table class="admin-table magazine">
         <tr>    
@@ -138,7 +137,7 @@ WebSession::put('USER_CAN_UPLOAD', 1);
         </tr>
         <tr>    
             <td></td>
-            <td><input type="submit" id="magazine-submit" value="Upload"/></td>
+            <td><input type="submit" id="magazine-submit" value="Create"/></td>
         </tr>
     </table>
 </form>
