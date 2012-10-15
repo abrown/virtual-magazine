@@ -23,18 +23,40 @@ try {
 if( isset($_POST['title']) ){
     $configuration->set('title', BasicSanitize::toText($_POST['title']));
 }
+
+// if GET, reset
+if( isset($_GET['reset']) && $_GET['reset'] ){
+    $configuration->reset();
+    $configuration->title = '[Your Title Here]';
+    $configuration->representations = array('text/html', 'application/json');
+    $configuration->authentication = new stdClass();
+    $configuration->set('authentication.enforce_https', false);
+    $configuration->set('authentication.authentication_type', 'digest');
+    $configuration->set('authentication.password_security', 'plaintext');
+    $configuration->set('authentication.users', array());
+    $configuration->set('authentication.users.0', new stdClass());
+    $configuration->set('authentication.users.0.username', 'admin');
+    $configuration->set('authentication.users.0.roles', array('administrator'));
+    $configuration->set('authentication.users.0.password', 'admin');
+    $configuration->set('authentication.storage', new stdClass());
+    $configuration->set('authentication.storage.type', 'memory');
+    $configuration->set('acl', array('admin can * */*','* can GET magazine/*','* can GET page/*','* can OPTIONS page/*'));
+}
+
+// store configuration, if necessary
 if($configuration->isChanged()){
     $configuration->store();
 }
 
-// start capture
+// start HTML capture
 ob_start();
 ?>
 <h2>Settings</h2>
 <form method="POST">
     <p>
-        Edit site-wide settings below.
-    </p>   
+        Edit site-wide settings below. You may also restore default values by
+        clicking <a class="magazine-admin-button" href="<?php echo WebUrl::create('configure.php?reset=1'); ?>">Restore Defaults</a>.
+    </p>
     <table class="admin-table magazine">
         <tr>    
             <td>Site Title</td>
@@ -51,7 +73,7 @@ ob_start();
 $content = ob_get_clean();
 
 // templating
-$template = new WebTemplate('server/ui/admin-template.php', WebTemplate::PHP_FILE);
+$template = new WebTemplate('site/templates/admin.php', WebTemplate::PHP_FILE);
 $template->replace('title', 'Settings');
 $template->replace('content', $content);
 $template->display();
