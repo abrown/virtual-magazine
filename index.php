@@ -1,10 +1,6 @@
 <?php
 require 'server/pocket-knife/start.php';
-require 'server/classes/Magazine.php';
-require 'server/classes/Library.php';
-require 'server/classes/Link.php';
-require 'server/classes/Page.php';
-require 'server/classes/Social.php';
+add_include_path('server/classes');
 
 // get configuration
 $configuration = new Settings(get_base_dir() . '/../configuration.json');
@@ -16,15 +12,13 @@ ob_start();
 <?php
 // get library
 $library = new Library();
-$_GET['width'] = 200;
 $magazines = $library->GET();
 foreach ($magazines->items as $id => $magazine):
     try {
         $page = new Page($id, 1);
         $page->GET();
-        $url = WebUrl::getSiteUrl() . 'service.php' . DS . 'magazine' . DS . $id;
         ?>
-        <a href="<?php echo $url ?>">
+        <a href="<?php echo WebUrl::create("service.php/magazine/{$id}"); ?>">
             <div class="magazine-thumbnail">
                 <img src="<?php echo $page->image; ?>" title="<?php echo $magazine->title; ?>" alt="<?php echo $magazine->title; ?>"/>
                 <h4><?php echo $magazine->title; ?></h4>
