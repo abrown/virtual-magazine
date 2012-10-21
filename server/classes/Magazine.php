@@ -6,8 +6,7 @@
  */
 class Magazine extends ResourceItem {
 
-    protected $storage = array('type' => 'json', 'location' => 'server/library.json');
-    protected $cacheable = false;
+    protected $storage = array('type' => 'json', 'location' => 'server/db/library.json');
 
     /**
      * Magazine ID
@@ -99,7 +98,7 @@ class Magazine extends ResourceItem {
      */
     function GET_OUTPUT_TRIGGER($representation) {
         if ($representation->getContentType() == 'text/html') {
-            $representation->setTemplate('server/ui/site-template.php', WebTemplate::PHP_FILE);
+            $representation->setTemplate('site/templates/main.php', WebTemplate::PHP_FILE);
             $representation->getTemplate()->replace('title', $this->title);
             $representation->getTemplate()->replaceFromPHPFile('content', 'server/ui/magazine-view.php', array('data' => $representation->getData()));
         }
@@ -169,6 +168,36 @@ class Magazine extends ResourceItem {
     }
 
     /**
+     * Edit a magazine; 
+     * @param stdClass $entity
+     * @return Magazine 
+     */
+    public function PUT($entity = null) {
+        if ($entity == null) {
+            $this->GET();
+            return $this; // no data returned, go to 'magazine-edit.php' template
+        }
+        // check fields
+        if (!@$entity->tracking_code)
+            unset($entity->tracking_code); // browsers will submit an empty string that triggers the regex validation
+        BasicValidation::with($entity)
+                ->isObject()
+                ->hasNoProperty('id')
+                ->withProperty('title')->isString()->isNotEmpty()->hasLengthUnder(100)
+                ->upAll()
+                ->withOptionalProperty('description')->isString()->hasLengthUnder(1000)
+                ->upAll()
+                ->withOptionalProperty('tracking_code')->matches('/^ua-\d{4,9}-\d{1,4}$/i');
+        // save
+        $result = parent::PUT($entity);
+        // mark as saved/changed
+        $this->saved = true;
+        $this->changed();
+        // return
+        return $result;
+    }
+
+    /**
      * DELETE a magazine
      * @return Magazine
      */
@@ -177,9 +206,9 @@ class Magazine extends ResourceItem {
         $number_of_pages = self::countPages($this->id);
         for ($i = 1; $i <= $number_of_pages; $i++) {
             $uri = "page/{$this->id}/{$i}";
-            Cache::getInstance()->DELETE($uri);
+            Cache::getInstance($uri)->DELETE();
         }
-        Cache::getInstance()->DELETE('library');
+        Cache::getInstance('library');
         // delete PDF
         @unlink(self::getPathToPdf($this->id));
         // delete JPEGs
@@ -227,7 +256,7 @@ class Magazine extends ResourceItem {
                 ->upAll()
                 ->withOptionalProperty('tracking_code')->matches('/^ua-\d{4,9}-\d{1,4}$/i');
         // check for prior existence
-        BasicValidation::with(@$entity->id)->isAlphanumeric();
+        @BasicValidation::with(@$entity->id)->isAlphanumeric();
         if ($this->getStorage()->exists($entity->id)) {
             throw new Error("A magazine with ID '{$entity->id}' already exists.", 400);
         }
@@ -273,33 +302,53 @@ class Magazine extends ResourceItem {
     }
 
     /**
-     * Edit a magazine; 
-     * @param stdClass $entity
-     * @return Magazine 
+     * Create JPEGs for a given ID; the ID must have a 
+     * matching PDF file within the data folder or this
+     * method throws an Error.
+     * @param string $id
+     * @return int number of pages created
+     * @throws Error
      */
-    public function PUT($entity = null) {
-        if ($entity == null) {
-            $this->GET();
-            return $this; // no data returned, go to 'magazine-edit.php' template
+    public static function createJPEG($id) {
+        $path = self::getPathToPdf($id);
+        if (!file_exists($path)) {
+            throw new Error('Could not find PDF file: ' . $path, 404);
         }
-        // check fields
-        if (!@$entity->tracking_code)
-            unset($entity->tracking_code); // browsers will submit an empty string that triggers the regex validation
-        BasicValidation::with($entity)
-                ->isObject()
-                ->hasNoProperty('id')
-                ->withProperty('title')->isString()->isNotEmpty()->hasLengthUnder(100)
-                ->upAll()
-                ->withOptionalProperty('description')->isString()->hasLengthUnder(1000)
-                ->upAll()
-                ->withOptionalProperty('tracking_code')->matches('/^ua-\d{4,9}-\d{1,4}$/i');
-        // save
-        $result = parent::PUT($entity);
-        // mark as saved/changed
-        $this->saved = true;
-        $this->changed();
+        $file_path = self::getPathToData() . DS . $id;
+        $i = 1;
+        $continue = true;
+        while ($continue) {
+            $command = "\"" . self::getPathToGhostscript() . "\" -dNOPAUSE -sDEVICE=jpeg -r" . self::RESOLUTION . " -dFirstPage=$i -dLastPage=$i -sOutputFile=\"{$file_path}($i).jpg\" \"{$path}\"";
+            exec($command, $output, $return_value);
+            if (!file_exists("{$file_path}($i).jpg") || $return_value != 0) {
+                $continue = false;
+            }
+            $i++;
+        }
         // return
-        return $result;
+        return self::countPages($id);
+    }
+
+    /**
+     * Count the number of JPEG pages built for a given
+     * ID.
+     * @param string $id
+     * @return int
+     */
+    public static function countPages($id) {
+        $search = self::getPathToData() . DS . $id . '(*).jpg';
+        $files = glob($search);
+        return (int) count($files);
+    }
+
+    /**
+     * Return path to the PDF assigned to this ID
+     * @param string $id
+     * @return string
+     */
+    public static function getPathToPdf($id) {
+        $path = self::getPathToData() . DS . $id . '.pdf';
+        return $path;
     }
 
     /**
@@ -321,7 +370,7 @@ class Magazine extends ResourceItem {
      * @throws Error
      */
     public static function getPathToData() {
-        $path = realpath(get_base_dir() . '/../data');
+        $path = realpath(get_base_dir() . DS . '..' . DS . 'data');
         if ($path == false) {
             throw new Error('Could not find data directory.', 404);
         }
@@ -332,78 +381,17 @@ class Magazine extends ResourceItem {
     }
 
     /**
-     * Return path to the PDF assigned to this ID
-     * @param string $id
-     * @return string
-     */
-    public static function getPathToPdf($id) {
-        $path = self::getPathToData() . DS . $id . '.pdf';
-        return $path;
-    }
-
-    /**
      * Return path to 'gs'; necessary because some environments
      * do not include the path to the 'gs' binary
      * @return type
      */
     public static function getPathToGhostscript() {
-        $whereis = `whereis gs`;
-        $start = strpos($whereis, ':');
-        if ($start === false) {
-            $start = 0;
+        static $path = null;
+        if ($path === null) {
+            $configuration = new Settings(get_base_dir() . '/../configuration.json');
+            $path = $configuration->ghostscript_path;
         }
-        $whereis = ltrim(substr($whereis, $start + 1));
-        $end = strpos($whereis, ' ');
-        if ($end !== false) {
-            $whereis = substr($whereis, 0, $end);
-        }
-        $gs = trim($whereis);
-        return $gs;
-    }
-
-    /**
-     * Create JPEGs for a given ID; the ID must have a 
-     * matching PDF file within the data folder or this
-     * method throws an Error.
-     * @param string $id
-     * @return int number of pages created
-     * @throws Error
-     */
-    public static function createJPEG($id) {
-        $path = self::getPathToPdf($id);
-        if (!file_exists($path)) {
-            throw new Error('Could not find PDF file: ' . $path, 404);
-        }
-        $file_path = self::getPathToData() . DS . $id;
-        $i = 1;
-        $continue = true;
-        while($continue){
-            $command = self::getPathToGhostscript() . " -dNOPAUSE -sDEVICE=jpeg -r" . self::RESOLUTION . " -dFirstPage=$i -dLastPage=$i -sOutputFile={$file_path}[$i].jpg {$path}";
-            exec($command, $output, $return_value); 
-            if( !file_exists("{$file_path}[$i].jpg") || $return_value != 0 ) $continue = false;
-            $i++;
-            /*
-            if ($return_value !== 0) {
-                $error = implode("\n", $output);
-                throw new Error('Ghostscript failure returned: ' . $error, 500);
-            }
-             * 
-             */
-        }
-        // return
-        return self::countPages($id);
-    }
-
-    /**
-     * Count the number of JPEG pages built for a given
-     * ID.
-     * @param string $id
-     * @return int
-     */
-    public static function countPages($id) {
-        $search = self::getPathToData() . DS . $id . '\[*\].jpg';
-        $files = glob($search);
-        return (int) count($files);
+        return $path;
     }
 
 }
