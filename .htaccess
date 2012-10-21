@@ -1,4 +1,4 @@
-DirectoryIndex index.php
+DirectoryIndex index.php index.html
 
 RewriteEngine on
 RewriteRule .* - [E=CONTENT_TYPE:%{HTTP:content-type}]
