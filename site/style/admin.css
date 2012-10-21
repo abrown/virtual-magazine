@@ -9,19 +9,6 @@
     text-decoration: none;
 }
 
-/* CONTENT */
-.content{
-    min-height: 200px;
-}
-.content h3{
-    font-weight: bold;
-    font-size: 2em;
-    margin-top: 1em;
-}
-.content h3:first-child{
-    margin-top: 0;
-}
-
 /* */
 .magazine-embed-script{
     color: black;
@@ -48,16 +35,4 @@ ol.magazine-page-links{
 ol.magazine-page-links a{
     font-style: italic;
     font-weight: normal
-}
-
-p{
-    margin-bottom: 1em;
-}
-
-.magazine-admin-button{
-    padding: 0.5em;
-    border-radius: 0.25em;
-    color: white;
-    background-color: black !important;
-    font-weight: bold;
 }

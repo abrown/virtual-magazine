@@ -1,12 +1,14 @@
-<!-- buttons -->
-<p>
-    <a class="magazine-admin-button" href="<?php echo WebUrl::create('magazine?method=POST', false); ?>">New Magazine</a>
-    <a class="magazine-admin-button" href="<?php echo WebUrl::getDirectoryUrl() . 'configure.php'; ?>">Edit Settings</a>
-    <a class="magazine-admin-button" href="<?php echo WebUrl::getDirectoryUrl() . 'api.php'; ?>">API Documentation</a>
-</p>
-
 <!-- title -->
 <h2>Magazine Library</h2>
+
+<!-- buttons -->
+<p>
+    <a class="button" href="<?php echo WebUrl::createAnchoredUrl('magazine?method=POST', false); ?>">New Magazine</a>
+    <a class="button" href="<?php echo WebUrl::getDirectoryUrl() . 'configure.php'; ?>">Edit Settings</a>
+</p>
+<p>
+    
+</p>
 
 <!-- table -->
 <table class="admin-table library">
@@ -22,13 +24,13 @@
         foreach (@$data->items as $item) {
             $_uri = htmlentities($item->getURI());
             echo "<tr><td class='{$_uri}#id'>{$item->getID()}</td>";
-            $get = WebUrl::create($_uri, false);
+            $get = WebUrl::createAnchoredUrl($_uri, false);
             echo "<td class='{$_uri}#url'>$get</td>";
             echo "<td class='{$_uri}#links'>";
             echo "<a href='{$get}'>View</a> ";
-            $put = WebUrl::create($_uri . '?method=PUT', false);
+            $put = WebUrl::createAnchoredUrl($_uri . '?method=PUT', false);
             echo "<a href='{$put}'>Edit</a> ";
-            $delete = WebUrl::create($_uri . '?method=DELETE', false);
+            $delete = WebUrl::createAnchoredUrl($_uri . '?method=DELETE', false);
             echo "<a href='{$delete}'>Delete</a></td></tr>";
         }
     }

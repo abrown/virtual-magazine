@@ -3,14 +3,13 @@ html *{
 }
 body{
     background-color: #e7e9ea;
-    background-image: url(../images/background.jpg);
+    /* background-image: url(../images/background.jpg); */
     background-position: top left;
     background-repeat: repeat-x;
-    background-color: #ffffff;
     color: #000000;
     font-family: Arial, Helvetica, sans-serif;
-    letter-spacing: 0.5px;
-    font-size: 14px;
+    letter-spacing: 1px;
+    font-size: 16px;
 }
 body > div{
     width: 1200px;
@@ -18,6 +17,24 @@ body > div{
 }
 
 /* SITE-WIDE */
+h2{
+    font-size: 2em;
+    font-weight: bold;
+    margin-top: 1em;
+}
+h3{
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: bold;
+    margin-top: 1.25em;
+}
+h4, h5, h6{
+    font-weight: bold;
+    margin-top: 2em;
+}
+h1,h2,h3,h4,h5,h6:first-child{
+    margin-top: 0;
+}
 a{
     color: #000000;
     text-decoration: none;
@@ -26,15 +43,28 @@ a{
 a:hover{
     text-decoration: underline;
 }
-h2, h3{
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 0.5em;
-}
-h4{
-    font-weight: bold;
+p{
+    margin-top: 1em;
 }
 
+/* BUTTONS */
+.button, button{
+    padding: 0.5em;
+    border-radius: 0.25em;
+    color: white;
+    background-color: black;
+    font-weight: bold;
+    border: none;
+}
+.button:hover, button:hover{
+    text-decoration: none;
+    background-color: #272727;
+    cursor: pointer;
+}
+.help{
+    border-bottom: 1px dotted black;
+    cursor: help;
+}
 
 /* HEADER */
 .header h1{
@@ -64,7 +94,7 @@ h4{
 .navigation button{
     background-color: transparent;
     border: none;
-    cursor: pointer;
+    padding: 0;
 }
 .navigation .accounts{
     margin-top: 15px;
@@ -75,11 +105,10 @@ h4{
     background-color: #ffffff;
     min-height: 400px;
     padding: 1em 0;
-    padding-bottom: 1em;
 }
 .content > *{
-    margin-left: 12px;
-    /* outline: 1px dotted red; */
+    margin-left: 16px;
+    margin-right: 16px;
 }
 .content > .magazine-container{
     margin-left: 0;
@@ -98,7 +127,90 @@ h4{
 .magazine-thumbnail:hover{
     border: 1px solid #e7e9ea;
 }
+.magazine-thumbnail img{
+    width: 200px;
+}
+.book{
+    background-color: #1F1D1D;
+}
+.page{
+    border-right: 1px solid #B5B0B0;
+    border-bottom: 1px solid #B5B0B0;
+}
+.page .link{
+    outline: 3px dashed #B5B0B0;
+    z-index: 2000;
+}
+.page .link:hover{
+    outline: 3px dashed #1F1D1D;
+    cursor: pointer;
+}
 
+/** EDITING: activated when adding links to a page **/
+.editing{
+    cursor: crosshair;
+    outline: 3px solid blue;
+}
+.editing .link{
+    outline: 3px dashed blue;
+}
+.links{
+    margin-bottom: 2em;
+}
+#add-link, .links li{
+    margin-bottom: 0.5em;
+}
+
+/** BOOK CONTROLS **/
+.book-controls{
+    height: 3.5em;
+    margin-bottom: 1em;
+    position: relative; /* necessary in order for the z-index to beat out canvas' position absolute z-index */
+    z-index: 2000;
+}
+.book-controls span{
+    border-left: 1px solid #D9CECE;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 2em;
+    padding-left: 1em;
+    height: 3.5em;
+    line-height: 3.5em;
+    min-width: 20%;
+}
+.book-controls span:first-child{
+    border-left: none;
+    padding-left: 0;
+    line-height: inherit;
+}
+.book-controls span *{
+    vertical-align: middle;
+    background-color: transparent;
+}
+.book-controls span *:hover{
+    background-color: transparent;
+}
+
+/* FORMS */
+fieldset{
+    border-top: 1px solid #D9CECE;
+    margin-top: 2em;
+}
+legend{
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: bold;
+    padding-right: 1em;
+}
+label{
+    display: block;
+    margin-top: 1em;
+}
+input[type=text],input[type=password], input[type=file]{
+    padding:0.2em;
+    font-size: 1.5em;
+    min-width:80%;
+}
 
 /* FOOTER */
 .footer table{

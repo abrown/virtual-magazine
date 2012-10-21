@@ -18,7 +18,7 @@ if (!isset($configuration)){
             <td><a href="#">Overview</a></td>
             <td><a href="#">Overview</a></td>
             <td>
-                <a href="http://www.facebook.com"><img src="site/images/facebook.png" alt="" /></a> &nbsp;
+                <a href="http://www.facebook.com"><img src="<?php echo WebUrl::create('site/images/facebook.png'); ?>" alt="" /></a> &nbsp;
                 <a href="http://www.facebook.com">Follow us on Facebook</a>
             </td>
         </tr>
@@ -27,7 +27,7 @@ if (!isset($configuration)){
             <td><a href="#">Advertising</a></td>
             <td><a href="#">Customization</a></td>
             <td>
-                <a href="http://www.twitter.com"><img src="site/images/twitter.png" alt="" /></a> &nbsp;
+                <a href="http://www.twitter.com"><img src="<?php echo WebUrl::create('site/images/twitter.png'); ?>" alt="" /></a> &nbsp;
                 <a href="http://www.twitter.com">Follow us on Twitter</a>
             </td>
         </tr>
@@ -36,7 +36,7 @@ if (!isset($configuration)){
             <td><a href="#">Support</a></td>
             <td> </td>
             <td>
-                <a href="http://www.pinterest.com"><img src="site/images/pinterest.png" alt="" /></a> &nbsp;
+                <a href="http://www.pinterest.com"><img src="<?php echo WebUrl::create('site/images/pinterest.png'); ?>" alt="" /></a> &nbsp;
                 <a href="http://www.pinterest.com">Follow us on Pinterest</a>
             </td>
         </tr>

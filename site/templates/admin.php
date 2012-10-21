@@ -1,5 +1,5 @@
 <?php
-$configuration = new Settings(get_base_dir().'/../configuration.json');
+$configuration = new Settings(get_base_dir() . '/../configuration.json');
 ?>
 <!DOCTYPE hmtl>
 <html>
@@ -15,6 +15,7 @@ $configuration = new Settings(get_base_dir().'/../configuration.json');
         <div class="header">
             <div class="navigation">
                 <div class="accounts">
+                    <a href="<?php echo WebUrl::getDirectoryUrl() . 'configure.php'; ?>">Settings</a> |
                     <a href="<?php echo WebUrl::create('index.php'); ?>"><img src="<?php echo WebUrl::create('site/images/login.png'); ?>" alt="" /></a>
                     <a href="<?php echo WebUrl::create('index.php'); ?>"> Logout</a>
                 </div>

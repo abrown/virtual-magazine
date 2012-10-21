@@ -6,8 +6,8 @@ $configuration = new Settings(get_base_dir() . '/../configuration.json');
     <head>
         <meta charset="UTF-8">
         <title><template:title/></title>
-        <link rel="stylesheet" type="text/css" href="site/style/reset.css" />
-        <link rel="stylesheet" type="text/css" href="site/style/main.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo WebUrl::create('site/style/reset.css'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo WebUrl::create('site/style/main.css'); ?>" />
     </head>
     <body>
         <!-- header -->
@@ -16,15 +16,15 @@ $configuration = new Settings(get_base_dir() . '/../configuration.json');
                 <form action="#">
                     <input type="text" name="q" placeholder="Search Here" />
                     <button type="submit">
-                        <img src="site/images/search.png" alt="Search" />
+                        <img src="<?php echo WebUrl::create('site/images/search.png'); ?>" alt="Search" />
                     </button>
                 </form>
                 <div class="accounts">
-                    <a href="<?php echo WebUrl::create('service.php/library'); ?>"><img src="site/images/login.png" alt="" /></a>
+                    <a href="<?php echo WebUrl::create('service.php/library'); ?>"><img src="<?php echo WebUrl::create('site/images/login.png'); ?>" alt="" /></a>
                     <a href="<?php echo WebUrl::create('service.php/library'); ?>"> Login</a>
                 </div>
             </div>
-            <a href="/"><h1><template:title/></h1></a>
+            <a href="<?php echo WebUrl::create('index.php'); ?>"><h1><template:title/></h1></a>
         </div>
 
         <!-- main content -->
