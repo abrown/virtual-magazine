@@ -1,6 +1,7 @@
 {
-    "title":"StatMags",
-    "representations":["text\/html","application\/json","application\/x-www-form-urlencoded","multipart\/form-data"],
+    "title":"[Your Title Here]",
+    "debug": true,
+    "representations":["text\/html","application\/json", "multipart/form-data", "application/x-www-form-urlencoded"],
     "authentication":{
         "enforce_https":false,
         "authentication_type":"digest",
@@ -12,14 +13,13 @@
         }],
         "storage":{
             "type":"memory",
-            "data":{
-                "0":{
-                    "username":"admin",
-                    "roles":["administrator"],
-                    "password":"admin"
-                }
+            "data":[{
+                "username":"admin",
+                "roles":["administrator"],
+                "password":"admin"
+            }]
             }
-        }
-},
-"acl":["admin can * *\/*","* can GET magazine\/*","* can GET page\/*","* can OPTIONS page\/*","* can GET social\/*"]
+        },
+"acl":["admin can * *\/*","* can GET magazine\/*","* can GET page\/*","* can OPTIONS page\/*"],
+"ghostscript_path":"C:\/Program Files\/Ghostscript\/bin\/gswin64c.exe"
 }
