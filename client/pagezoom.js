@@ -45,32 +45,27 @@
          * Constructor
          */
         _create: function() {
-            // style element
-            this.element.css({
-                //position: 'relative',
-                overflow: 'hidden'
-            });
             // create wrapper
-            $(this.element).wrapInner('<div class="zoom-wrapper" />');
-            this.wrapper = this.element.find('.zoom-wrapper').get(0);
-            $(this.wrapper).css({
+            this.element.wrap('<div class="zoom-wrapper" />');
+            this.wrapper = this.element.parent();
+            this.wrapper.css({
                 position: 'relative', // must be relative for dragging to work correctly
                 height: this.element.height(),
                 width: this.element.width(),
-                overflow: 'hidden'
+                'background-color': '#B5B0B0'
             });
             // make draggable
             if(this.options.DRAGGABLE){
-                $(this.wrapper).draggable({
+                this.element.draggable({
                     disabled: true
                 });
             }
             // set CSS easing
-            this.wrapper.style.transition = 'transform 0.8s ease';
-            this.wrapper.style.OTransition = '-o-transform 0.8s ease';
-            this.wrapper.style.msTransition = '-ms-transform 0.8s ease';
-            this.wrapper.style.MozTransition = '-moz-transform 0.8s ease';
-            this.wrapper.style.WebkitTransition = '-webkit-transform 0.8s ease';          
+            this.element.css('transition', 'transform 0.8s ease');
+            this.element.css('OTransition', '-o-transform 0.8s ease');
+            this.element.css('msTransition', '-ms-transform 0.8s ease');
+            this.element.css('MozTransition', '-moz-transform 0.8s ease');
+            this.element.css('WebkitTransition', '-webkit-transform 0.8s ease');          
             // set event handlers
             var self = this;
             // on double-click, zoom to the default level
@@ -92,18 +87,18 @@
             // set touch event handlers
             this.element.bind('touchstart', function(e){
                 e.preventDefault();
-                if($(self.wrapper).data('draggable').options.disabled) return;
-                $(self.wrapper).data('draggable')._mouseStart(e.originalEvent.targetTouches[0]);
+                if(self.element.data('draggable').options.disabled) return;
+                self.element.data('draggable')._mouseStart(e.originalEvent.targetTouches[0]);
             });
             this.element.bind('touchmove', function(e){
                 e.preventDefault();
-                if($(self.wrapper).data('draggable').options.disabled) return;
-                $(self.wrapper).data('draggable')._mouseDrag(e.originalEvent.targetTouches[0]);
+                if(self.element.data('draggable').options.disabled) return;
+                self.element.data('draggable')._mouseDrag(e.originalEvent.targetTouches[0]);
             });
             this.element.bind('touchend touchcancel', function(e){
                 e.preventDefault();
-                if($(self.wrapper).data('draggable').options.disabled) return;
-                $(self.wrapper).data('draggable')._mouseStop(e.originalEvent.targetTouches[0]);
+                if(self.element.data('draggable').options.disabled) return;
+                self.element.data('draggable')._mouseStop(e.originalEvent.targetTouches[0]);
             });
         },
         
@@ -118,8 +113,13 @@
             if(this.zoom >= this.options.ZOOM_MIN && this.zoom <= this.options.ZOOM_MAX){
                 // enable dragging
                 if(this.options.DRAGGABLE){
-                    $(this.wrapper).draggable('enable');
+                    this.element.draggable('enable');
                 }
+                // set zoomed styles
+                this.wrapper.css({
+                    border: '1px inset',
+                    overflow: 'hidden'
+                });
                 // set zoom
                 this.zoom = zoom;
                 // calculate translations
@@ -145,14 +145,19 @@
             if(this.zoom >= this.options.ZOOM_MIN && this.zoom <= this.options.ZOOM_MAX){
                 // disable dragging
                 if(this.options.DRAGGABLE){
-                    $(this.wrapper).draggable('disable');
-                }          
+                    this.element.draggable('disable');
+                }
+                // set overflow
+                this.wrapper.css({
+                    border: 'none',
+                    overflow: 'visible'
+                });
                 // set zoom
                 this.zoom = 1;
                 // scale and translate
                 this._transform('scale(' + this.zoom + ', ' + this.zoom + ')');
                 // ensure translate
-                $(this.wrapper).css({
+                $(this.element).css({
                     left: 0, 
                     top: 0
                 });
@@ -166,7 +171,7 @@
          * base element
          */
         _getClickOffset: function(e){
-            var offset = this.element.offset();
+            var offset = this.wrapper.offset();
             return {
                 x: e.pageX - offset.left, 
                 y: e.pageY - offset.top
@@ -177,12 +182,12 @@
          * Perform CSS3 transforms
          */
         _transform: function(transform){
-            this.wrapper.style.transformOrigin = 'left top';
-            this.wrapper.style.transform = transform;
-            this.wrapper.style.OTransform = transform;
-            this.wrapper.style.msTransform = transform;
-            this.wrapper.style.MozTransform = transform;
-            this.wrapper.style.WebkitTransform = transform;
+            this.element.css('transformOrigin', 'left top');
+            this.element.css(transform, transform);
+            this.element.css('OTransform', transform);
+            this.element.css('msTransform', transform);
+            this.element.css('MozTransform', transform);
+            this.element.css('WebkitTransform', transform);
         },
  
         /**
