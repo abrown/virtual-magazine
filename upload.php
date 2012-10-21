@@ -26,8 +26,8 @@ $FILE_PATH = getcwd() . '/upload/' . $FILE_NAME;
  * authorized session.
  */
 // set session location (for some reason, /tmp was failing)
-session_save_path(get_base_dir() . DS . '..' . DS . 'session');
-ini_set('session.gc_probability', 1);
+//session_save_path(get_base_dir() . DS . '..' . DS . 'session');
+//ini_set('session.gc_probability', 1);
 // set session ID
 if (isset($_REQUEST['php_session_id'])) {
     session_id($_REQUEST['php_session_id']);
