@@ -39,6 +39,12 @@ Main files to look at:
     printable version of the magazine
     4. upload.php - used by SWFUpload to upload PDF files to /upload
 
+Also, if using Apache, ensure that:
+    1. The httpd.conf must allow you to override options in .htaccess. Check that
+    "AllowOverride All" is uncommented in httpd.conf.
+    2. URL rewriting must be setup up; ensure the line
+    "LoadModule rewrite_module modules/mod_rewrite.so" is uncommented in httpd.conf.
+
 
 Using the client
 ----------------
