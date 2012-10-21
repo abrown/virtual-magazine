@@ -5,10 +5,9 @@
  */
 class Library extends ResourceList {
 
-    protected $storage = array('type' => 'json', 'location' => 'server/library.json');
+    protected $storage = array('type' => 'json', 'location' => 'server/db/library.json');
     protected $item_type = 'Magazine';
     protected $representation = 'text/html';
-    protected $cacheable = false;
 
     /**
      * Add templating to 'text/html' requests

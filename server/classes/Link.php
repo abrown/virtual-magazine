@@ -5,7 +5,7 @@
  */
 class Link extends ResourceItem {
 
-    protected $storage = array('type' => 'json', 'location' => 'server/links.json');
+    protected $storage = array('type' => 'json', 'location' => 'server/db/links.json');
 
     /**
      * Internal ID for the link
@@ -77,6 +77,14 @@ class Link extends ResourceItem {
     public $original_image_height;
 
     /**
+     * Constructor; 
+     */
+//    public function __construct() {
+//        parent::__construct();
+//        $this->setID(uniqid());
+//    }
+
+    /**
      * On change to a link, notify the cache of a change to the page
      * @param Representation $representation
      * @return Representation 
@@ -84,7 +92,7 @@ class Link extends ResourceItem {
     public function POST_OUTPUT_TRIGGER($representation) {
         // update cache
         $uri = "page/{$this->magazine_id}/{$this->page}";
-        Cache::getInstance()->DELETE($uri);
+        Cache::getInstance($this->getURI())->DELETE();
         // return
         return $representation;
     }
@@ -97,7 +105,7 @@ class Link extends ResourceItem {
     public function PUT_OUTPUT_TRIGGER($representation) {
         // update cache
         $uri = "page/{$this->magazine_id}/{$this->page}";
-        Cache::getInstance()->DELETE($uri);
+        Cache::getInstance($this->getURI())->DELETE();
         // return
         return $representation;
     }
@@ -110,8 +118,16 @@ class Link extends ResourceItem {
     public function DELETE_OUTPUT_TRIGGER($representation) {
         // update cache
         $uri = "page/{$this->magazine_id}/{$this->page}";
-        Cache::getInstance()->DELETE($uri);
+        Cache::getInstance($this->getURI())->DELETE();
         return $representation;
+    }
+    
+    /**
+     * Get URI for this link
+     * @return string
+     */
+    public function __toString(){
+        return $this->getURI();
     }
 
 }
