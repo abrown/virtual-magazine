@@ -8,8 +8,6 @@
  */
 class Page extends ResourceGeneric {
 
-    protected $cacheable = false;
-
     /**
      * Page number
      * @var int 
@@ -108,7 +106,7 @@ class Page extends ResourceGeneric {
     public function GET_OUTPUT_TRIGGER($representation) {
         if ($representation->getContentType() == 'text/html') {
             $representation->setTemplate('server/ui/page-view.php', WebTemplate::PHP_FILE);
-            $representation->getTemplate()->setVariable('data', $representation->getData());
+            @$representation->getTemplate()->setVariable('data', $representation->getData());
         }
         return $representation;
     }
@@ -121,49 +119,40 @@ class Page extends ResourceGeneric {
     public function OPTIONS_OUTPUT_TRIGGER($representation) {
         if ($representation->getContentType() == 'text/html') {
             $representation->setTemplate('server/ui/page-links.php', WebTemplate::PHP_FILE);
-            $representation->getTemplate()->setVariable('data', $representation->getData());
+            @$representation->getTemplate()->setVariable('data', $representation->getData());
         }
         return $representation;
     }
 
     /**
-     * GETs a page from a magazine
+     * GETs a page from a magazine; removed code limiting pages to 50px increments.
      * @return Page
      */
     public function GET() {
         // get resolution
-        $width = (int) WebHttp::getParameter('width');
-        $height = (int) WebHttp::getParameter('height');
-        // case: both width and height specified
-        if ($width && $height) {
-            throw new Error('Specify only one dimension (width or height) when retrieving a page.', 400);
-        }
+        $this->width = (int) WebHttp::getParameter('width');
+        $this->height = (int) WebHttp::getParameter('height');
         // case: neither specified
-        if (!$width && !$height) {
-            $width = self::DEFAULT_WIDTH;
+        if (!$this->width && !$this->height) {
+            $this->width = self::DEFAULT_WIDTH;
         }
-        // other cases: resizeJPEG() will determine corresponding width/height if only one dimension is set
-        // validate resolution; only allow multiples of 50
-        if ($width) {
-            if ($width < 50 || $width % 50 !== 0) {
-                throw new Error("Width parameter must be a multiple of 50 and greater than 0.", 400);
-            }
-        } elseif ($height) {
-            if ($height < 50 || $height % 50 !== 0) {
-                throw new Error("Height parameter must be a multiple of 50 and greater than 0.", 400);
-            }
+        // case: no height specified
+        if (!$this->height) {
+            $this->height = self::getCorrespondingHeight($this->magazine_id, $this->page, $this->width);
         }
-        // resize image
-        list($this->width, $this->height) = self::resizeJPEG($this->magazine_id, $this->page, $width, $height);
-        // add image URL
-        $this->image = self::getUrltoImage($this->magazine_id, $this->page, $width, $height);
+        // case: no width specified
+        if (!$this->width) {
+            $this->width = self::getCorrespondingHeight($this->magazine_id, $this->page, $this->height);
+        }
+        // resize image; if possible, use GD library to resize the image
+        if (function_exists('gd_info')) {
+            self::resizeJPEG($this->magazine_id, $this->page, $this->width, $this->height);
+            $this->image = self::getUrltoImage($this->magazine_id, $this->page, $this->width, $this->height);
+        } else {
+            $this->image = self::getUrltoImage($this->magazine_id, $this->page);
+        }
         // add page links
-        $_link = new Link();
-        foreach ($_link->getStorage()->search('magazine_id', $this->magazine_id) as $key => $value) {
-            if ($value->page == $this->page) {
-                $this->links[] = $value;
-            }
-        }
+        $this->links = $this->OPTIONS();
         // return
         return $this;
     }
@@ -185,9 +174,13 @@ class Page extends ResourceGeneric {
     }
 
     /**
+     * Resize a JPEG according to the specified width and height
      * @TODO test
-     * @param type $id
-     * @param type $max_width
+     * @param string $id
+     * @param int $page
+     * @param int $width
+     * @param int $height
+     * @return string location of the image
      * @throws Error
      */
     public static function resizeJPEG($id, $page, $width = null, $height = null) {
@@ -200,19 +193,19 @@ class Page extends ResourceGeneric {
         if (!file_exists($path)) {
             throw new Error('Missing file: ' . $path, 404);
         }
+        if (!$width && !$height) {
+            return $path;
+        }
         // test if already created; getPathToImage() will handle logic regarding width/height/base dimensions
         $resized_path = self::getPathToImage($id, $page, $width, $height);
         if (file_exists($resized_path)) {
-            list($width, $height, ) = getimagesize($resized_path);
-            return array($width, $height);
+            return $resized_path;
         }
         // otherwise, create it; find width/height
-        if ($width) {
+        if ($width && !$height) {
             $height = self::getCorrespondingHeight($id, $page, $width);
-        } elseif ($height) {
+        } elseif ($height && !$width) {
             $width = self::getCorrespondingWidth($id, $page, $height);
-        } else {
-            throw new Error('Execution should not reach this point.', 500);
         }
         // resize
         list($base_width, $base_height, ) = getimagesize($path);
@@ -222,7 +215,7 @@ class Page extends ResourceGeneric {
         // save
         imagejpeg($destination, $resized_path, self::JPEG_QUALITY);
         // return
-        return array($width, $height);
+        return $resized_path;
     }
 
     /**
@@ -234,9 +227,9 @@ class Page extends ResourceGeneric {
      * @return string
      */
     public static function getUrltoImage($id, $page, $width = null, $height = null) {
-        $url = WebUrl::getDirectoryUrl() . 'server' . DS . 'data' . DS . $id;
+        $url = WebUrl::create('server/data/' . $id);
         // add page
-        $url .= '[' . $page . ']';
+        $url .= '(' . $page . ')';
         // add width/height
         if ($width) {
             $url .= $width . 'w';
@@ -259,7 +252,7 @@ class Page extends ResourceGeneric {
     public static function getPathToImage($id, $page, $width = null, $height = null) {
         $path = Magazine::getPathToData() . DS . $id;
         // add page
-        $path .= '[' . $page . ']';
+        $path .= '(' . $page . ')';
         // add width/height
         if ($width) {
             $path .= $width . 'w';
@@ -282,12 +275,12 @@ class Page extends ResourceGeneric {
     public static function getCorrespondingHeight($id, $page, $width) {
         $path = self::getPathToImage($id, $page);
         if (!file_exists($path)) {
-            throw new Error('Missing file: ' . $path, 404);
+            throw new Error("The following file was not found: {$path}. Ensure that the page exists in the original PDF and that it has been converted to JPG.", 404);
         }
         // calculate ratio
         list($current_width, $current_height, ) = getimagesize($path);
         $ratio = $current_width / $current_height;
-        $height = (int) $width / $ratio;
+        $height = (int) ($width / $ratio);
         // return
         return $height;
     }
@@ -303,12 +296,12 @@ class Page extends ResourceGeneric {
     public static function getCorrespondingWidth($id, $page, $height) {
         $path = self::getPathToImage($id, $page);
         if (!file_exists($path)) {
-            throw new Error('Missing file: ' . $path, 404);
+            throw new Error("The following file was not found: {$path}. Ensure that the page exists in the original PDF and that it has been converted to JPG.", 404);
         }
         // calculate ratio
         list($current_width, $current_height, ) = getimagesize($path);
         $ratio = $current_width / $current_height;
-        $width = (int) $height * $ratio;
+        $width = (int) ($height * $ratio);
         // return
         return $width;
     }
