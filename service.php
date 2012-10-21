@@ -1,11 +1,7 @@
 <?php
 
 require 'server/pocket-knife/start.php';
-require 'server/classes/Magazine.php';
-require 'server/classes/Library.php';
-require 'server/classes/Link.php';
-require 'server/classes/Page.php';
-require 'server/classes/Social.php';
+add_include_path('server/classes');
 
 // disable time limit; if not, under load, image processing may fail
 set_time_limit(0);
