@@ -1,9 +1,6 @@
 <?php
 require 'server/pocket-knife/start.php';
-require 'server/classes/Magazine.php';
-require 'server/classes/Library.php';
-require 'server/classes/Link.php';
-require 'server/classes/Page.php';
+add_include_path('server/classes');
 
 try {
     // validate ID
@@ -29,7 +26,7 @@ try {
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Print "<?php echo $magazine->title; ?>"</title>
+        <title>Print: <?php echo $magazine->title; ?></title>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
         <script type="text/javascript">
             $(window).load(function(){
@@ -49,7 +46,7 @@ try {
             .magazine-loading{
                 border: 1px solid grey;
                 background-color: white;
-                background-image: url('/client/images/loading.gif');
+                background-image: url('<?php echo WebUrl::create('client/images/loading.gif'); ?>');
                 background-position: center;
                 background-repeat: no-repeat;
                 height: 200px;
@@ -84,10 +81,8 @@ try {
         $number_of_pages = $magazine::countPages($id);
         for ($i = 1; $i <= $number_of_pages; $i++) {
             $page = new Page($id, $i);
-            echo "<div class='magazine-page'>";
             $data = $page->GET();
             include 'server/ui/page-view.php';
-            echo "</div>";
         }
         ?>
     </body>
