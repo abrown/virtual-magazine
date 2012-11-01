@@ -157,7 +157,12 @@
                     top: (this.options.BOOK_HEIGHT)/2,
                     left: (this.state.page_padding_x)*2,
                     'z-index': 1001
-                }).click(function(e){
+                })
+                .on('touchstart touchend touchcancel mousedown mouseup', function(e){
+                    e.stopPropagation(); // we stop propagation on touches and mouse up/downs because it causes the page flip to render, messing up next()/previous(); we assume that a click event will also be triggered
+                })
+                .on('click', function(e){
+                    e.stopPropagation();
                     self.previous();
                 });
                 $('<button class="next">&#9654;</button>').prependTo(this.book).css({
@@ -165,7 +170,12 @@
                     top: (this.options.BOOK_HEIGHT)/2,
                     right: (this.state.page_padding_x)*2,
                     'z-index': 1001
-                }).click(function(e){
+                })
+                .on('touchstart touchend touchcancel mousedown mouseup', function(e){
+                    e.stopPropagation(); // we stop propagation on touches and mouse up/downs because it causes the page flip to render, messing up next()/previous(); we assume that a click event will also be triggered
+                })
+                .on('click', function(e){
+                    e.stopPropagation();
                     self.next();
                 });
             }
@@ -199,10 +209,10 @@
             
             // set event handlers
             this.book.mousemove(function(e){
-                self._mouseMoveHandler.call(self, e)
+                self._mouseMoveHandler.call(self, e);
             });
             this.book.mousedown(function(e){
-                self._mouseDownHandler.call(self, e)
+                self._mouseDownHandler.call(self, e);
             });
             this.book.mouseleave(function(e){
                 self._mouseUpHandler.call(self, e);
@@ -212,16 +222,16 @@
             });
             // set touch event handlers
             this.book.bind('touchstart', function(e){
-                e.preventDefault();
-                self._mouseMoveHandler.call(self, e.originalEvent.targetTouches[0]);
+                e.preventDefault(); // prevents touch from moving the screen around
+                self._mouseMoveHandler.call(self, e.originalEvent.targetTouches[0]); // sets up this.mouse; otherwise the mouse down handler will not know where to start from
                 self._mouseDownHandler.call(self, e.originalEvent.targetTouches[0]);
             });
             this.book.bind('touchmove', function(e){
-                e.preventDefault();
+                e.preventDefault(); // prevents touch from moving the screen around
                 self._mouseMoveHandler.call(self, e.originalEvent.targetTouches[0]);
             });
             this.book.bind('touchend touchcancel', function(e){
-                e.preventDefault();
+                e.preventDefault(); // prevents touch from moving the screen around
                 self._mouseUpHandler.call(self, e.originalEvent.targetTouches[0]);
             });
             // trigger
