@@ -266,7 +266,7 @@
             // calculate displacement
             var dx = this.state.progress * this.options.PAGE_WIDTH;
             if(this.state.next_element == undefined && this.state.target < 0){
-                dx = Math.max(dx, -0.33 * this.options.PAGE_WIDTH * this.state.progress); // if no next element exists, allow only 33% of blank to show 
+                dx = Math.max(dx, 0.33 * this.options.PAGE_WIDTH * this.state.progress); // if no next element exists, allow only 33% of blank to show 
             }
             else if(this.state.previous_element == undefined && this.state.target > 0){
                 dx = Math.min(dx, 0.33 * this.options.PAGE_WIDTH * this.state.progress); // if no next element exists, allow only 33% of blank to show 
