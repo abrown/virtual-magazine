@@ -29,10 +29,6 @@
     border: 1px solid #D9CECE;
 }
 
-ol.magazine-page-links{
-    font-weight: bold;
-}
-ol.magazine-page-links a{
-    font-style: italic;
-    font-weight: normal
+#virtual-mag{
+    outline: 2px solid #D9CECE;
 }
