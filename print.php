@@ -1,6 +1,7 @@
 <?php
 require 'server/pocket-knife/start.php';
 add_include_path('server/classes');
+set_time_limit(0);
 
 try {
     // validate ID
