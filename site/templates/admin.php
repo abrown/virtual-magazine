@@ -1,6 +1,3 @@
-<?php
-$configuration = new Settings(get_base_dir() . '/../configuration.json');
-?>
 <!DOCTYPE hmtl>
 <html>
     <head>
@@ -30,7 +27,7 @@ $configuration = new Settings(get_base_dir() . '/../configuration.json');
 
         <?php
         // insert footer
-        require get_base_dir() . '/../../site/templates/footer.php';
+        require get_vm_dir() . '/site/templates/footer.php';
         ?>  
     </body>
 </html>

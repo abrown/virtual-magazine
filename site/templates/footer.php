@@ -1,7 +1,7 @@
 <?php
 // ensure configuration is available
 if (!isset($configuration)){
-    $configuration = new Settings(get_base_dir() . '/../configuration.json');
+    $configuration = new Settings(get_vm_dir() . '/server/configuration.json');
 }
 ?>
 <!-- footer -->
