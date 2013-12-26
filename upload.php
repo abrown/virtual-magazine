@@ -1,6 +1,6 @@
 <?php
 
-require 'server/pocket-knife/start.php';
+require 'required-include.php';
 
 /**
  * Allow higher time limit

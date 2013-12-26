@@ -1,10 +1,6 @@
 <?php
 
-require 'server/pocket-knife/start.php';
-require 'server/classes/Magazine.php';
-require 'server/classes/Library.php';
-require 'server/classes/Link.php';
-require 'server/classes/Page.php';
+require 'required-include.php';
 
 try {
     // validate ID

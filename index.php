@@ -1,9 +1,6 @@
 <?php
-require 'server/pocket-knife/start.php';
-add_include_path('server/classes');
-
-// get configuration
-$configuration = new Settings(get_base_dir() . '/../configuration.json');
+require 'required-include.php';
+$configuration = new Settings('server/configuration.json');
 
 // start capture
 ob_start();

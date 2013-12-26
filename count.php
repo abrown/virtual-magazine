@@ -1,5 +1,4 @@
 <?php
-require 'server/pocket-knife/start.php';
-add_include_path('server/classes');
+require 'required-include.php';
 $tokens = WebUrl::getTokens();
 echo Magazine::countPages(@$tokens[0]);

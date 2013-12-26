@@ -6,7 +6,7 @@ HTML5, and jQuery to serve up magazine pages to HTTP clients; some features
 include the ability to add clickable links to pages, embedding, and print views.
  It requires GhostScript installed on the server to convert the PDF to JPEGs.
 
-An example is available at http://www.purplecowmagazines.com.
+An example is available at http://www.casabrown.com/projects/virtual-magazine.
 
 
 Installing Ghostscript
@@ -39,6 +39,10 @@ Main files to look at:
     printable version of the magazine
     4. upload.php - used by SWFUpload to upload PDF files to /upload
 
+Install pocket-knife (https://github.com/andrewsbrown/pocket-knife) and point
+to it in 'required-include.php'. The server uses pocket-knife to set up the 
+RESTful API.
+
 Also, if using Apache, ensure that:
     1. The httpd.conf must allow you to override options in .htaccess. Check that
     "AllowOverride All" is uncommented in httpd.conf.
@@ -60,10 +64,10 @@ and GD will be reading/writing JPEGs here. GD must be installed in PHP for the
 automatic re-sizing to work.
 
 
+
 TODO
 ----
 
-- 
 - fix caching so that the server can respond with '304 Not Modified' to repeated
 requests for the same page; this was disabled because IE was caching everything
 

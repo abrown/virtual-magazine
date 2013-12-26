@@ -1,5 +1,5 @@
 <?php
-require 'server/pocket-knife/start.php';
+require 'required-include.php';
 
 // get configuration
 $configuration = new Settings('server/configuration.json');

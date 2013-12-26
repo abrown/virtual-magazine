@@ -1,6 +1,5 @@
 <?php
-require 'server/pocket-knife/start.php';
-add_include_path('server/classes');
+require 'required-include.php';
 set_time_limit(0);
 
 try {
