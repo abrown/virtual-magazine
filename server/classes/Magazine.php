@@ -256,7 +256,6 @@ class Magazine extends ResourceItem {
                 ->upAll()
                 ->withOptionalProperty('tracking_code')->matches('/^ua-\d{4,9}-\d{1,4}$/i');
         // check for prior existence
-        @BasicValidation::with(@$entity->id)->isAlphanumeric();
         if ($this->getStorage()->exists($entity->id)) {
             throw new Error("A magazine with ID '{$entity->id}' already exists.", 400);
         }
@@ -266,9 +265,9 @@ class Magazine extends ResourceItem {
         }
         // bind
         $this->id = $entity->id;
-        $this->title = htmlentities(@$entity->title);
-        $this->description = htmlentities(@$entity->description);
-        $this->tracking_code = @$entity->tracking_code;
+        $this->title = htmlentities($entity->title);
+        $this->description = property_exists($entity, 'description') ? htmlentities(@$entity->description) : null;
+        $this->tracking_code = property_exists($entity, 'tracking_code') ? $entity->tracking_code : null;
         $this->created = date('M j, Y');
         $this->pdf = $this->getPathToPdf($this->id);
         // create PDF
@@ -356,7 +355,7 @@ class Magazine extends ResourceItem {
      * @return string
      */
     public static function getPathToUploads() {
-        $path = realpath(get_base_dir() . '/../../upload');
+        $path = realpath(get_vm_dir() . DS . 'upload');
         if ($path == false) {
             throw new Error('Could not find upload directory.', 404);
         }
@@ -370,7 +369,7 @@ class Magazine extends ResourceItem {
      * @throws Error
      */
     public static function getPathToData() {
-        $path = realpath(get_base_dir() . DS . '..' . DS . 'data');
+        $path = realpath(get_vm_dir() . DS . 'server' . DS . 'data');
         if ($path == false) {
             throw new Error('Could not find data directory.', 404);
         }
@@ -388,7 +387,7 @@ class Magazine extends ResourceItem {
     public static function getPathToGhostscript() {
         static $path = null;
         if ($path === null) {
-            $configuration = new Settings(get_base_dir() . '/../configuration.json');
+            $configuration = new Settings(get_vm_dir() . DS . 'server' . DS . 'configuration.json');
             $path = $configuration->ghostscript_path;
         }
         return $path;

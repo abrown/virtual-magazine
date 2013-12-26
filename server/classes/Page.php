@@ -105,8 +105,9 @@ class Page extends ResourceGeneric {
      */
     public function GET_OUTPUT_TRIGGER($representation) {
         if ($representation->getContentType() == 'text/html') {
-            $representation->setTemplate('server/ui/page-view.php', WebTemplate::PHP_FILE);
-            @$representation->getTemplate()->setVariable('data', $representation->getData());
+            $representation->setTemplate(get_vm_dir(). DS . 'server' . DS . 'ui' . DS . 'page-view.php', WebTemplate::PHP_FILE);
+            $data = $representation->getData(); // can't pass getData() as a reference in strict PHP
+            $representation->getTemplate()->setVariable('data', $data);
         }
         return $representation;
     }
@@ -118,8 +119,9 @@ class Page extends ResourceGeneric {
      */
     public function OPTIONS_OUTPUT_TRIGGER($representation) {
         if ($representation->getContentType() == 'text/html') {
-            $representation->setTemplate('server/ui/page-links.php', WebTemplate::PHP_FILE);
-            @$representation->getTemplate()->setVariable('data', $representation->getData());
+            $representation->setTemplate(get_vm_dir(). DS . 'server' . DS . 'ui' . DS . 'page-links.php', WebTemplate::PHP_FILE);
+            $data = $representation->getData(); // can't pass getData() as a reference in strict PHP
+            $representation->getTemplate()->setVariable('data', $data);
         }
         return $representation;
     }
