@@ -68,16 +68,6 @@
             this.element.css('WebkitTransition', '-webkit-transform 0.8s ease');          
             // set event handlers
             var self = this;
-            // on double-click, zoom to the default level
-            this.element.dblclick(function(e){
-                if(self.zoom > 1){
-                    self.resetZoom.call(self);
-                }
-                else{
-                    var offset = self._getClickOffset.call(self, e);
-                    self.zoomTo.call(self, self.options.ZOOM_DEFAULT, offset.x, offset.y);
-                }
-            });
             // on escape, zoom to normal
             $(window).keyup(function(event) {
                 if( self.zoom !== 1 && event.keyCode === 27 ) {
