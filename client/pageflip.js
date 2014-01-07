@@ -408,7 +408,8 @@
                 this.addPage(this.state.length, this.options.BASE_URL.replace('[page#]', this.state.length + 1));
             }
             // make sure the selected page can be moved
-            if(this.page - 1 < 0 || this.page + 1 > this.pages.length){
+            if(this.page - 1 < 0 || this.page + 1 >= this.pages.length){
+                this.page = (this.mouse.x > 0) ? this.page - 1 : this.page; // reset page
                 return;
             }
             // create the flip
