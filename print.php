@@ -77,8 +77,8 @@ try {
             Magazine will print when loading is complete...
         </div>
         <?php
-        $_GET['width'] = 1700; // set images to 200 DPI
-        $number_of_pages = $magazine::countPages($id);
+        $_GET['width'] = 1100; // set images to 200 DPI
+        $number_of_pages = $magazine->countPages($id);
         for ($i = 1; $i <= $number_of_pages; $i++) {
             $page = new Page($id, $i);
             $data = $page->GET();
