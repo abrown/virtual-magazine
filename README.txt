@@ -80,3 +80,5 @@ requests for the same page; this was disabled because IE was caching everything
 - add tests
 
 - improve error dialog display, styling
+
+- setup demo
